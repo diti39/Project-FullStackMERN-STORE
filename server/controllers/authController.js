@@ -1,6 +1,6 @@
 import User from '../models/User.js';
 import asyncHandler from '../utils/asyncHandler.js';
-import generateToken from '../utils/generateToken.js';
+import generateToken, { cookieOptions } from '../utils/generateToken.js';
 
 // Never send the password hash back
 const userResponse = (user) => ({
@@ -50,7 +50,7 @@ export const login = asyncHandler(async (req, res) => {
 
 // POST /api/auth/logout
 export const logout = (req, res) => {
-  res.cookie('jwt', '', { httpOnly: true, expires: new Date(0) });
+  res.clearCookie('jwt', cookieOptions);
   res.json({ message: 'Logged out' });
 };
 

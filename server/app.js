@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import authRoutes from './routes/authRoutes.js';
@@ -15,7 +16,14 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 const app = express();
 
 // Global middleware
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(helmet()); // sensible security headers
+
+// CLIENT_URL may list several origins separated by commas (no trailing slashes)
+const allowedOrigins = (process.env.CLIENT_URL || '')
+  .split(',')
+  .map((o) => o.trim().replace(/\/$/, ''))
+  .filter(Boolean);
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 // Stripe's webhook needs the RAW body to verify its signature.
 // It must be registered BEFORE express.json(), which would replace the body with parsed JSON.
 app.post('/api/payments/webhook', express.raw({ type: 'application/json' }), handleWebhook);
