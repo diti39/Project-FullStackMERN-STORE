@@ -18,12 +18,12 @@ A full-stack e-commerce application built with **MongoDB, Express, React and Nod
     <td><img src="docs/screenshots/cart.png" alt="Cart and checkout"><br><sub>Cart and checkout</sub></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/payment.png" alt="Order page with Stripe card payment form"><br><sub>Card payment with Stripe (test mode)</sub></td>
+    <td><img src="docs/screenshots/admin-dashboard.png" alt="Admin dashboard with sales statistics"><br><sub>Admin dashboard</sub></td>
     <td><img src="docs/screenshots/order.png" alt="Order history"><br><sub>Order history</sub></td>
   </tr>
-  <tr>
-    <td><img src="docs/screenshots/admin-dashboard.png" alt="Admin dashboard with sales statistics"><br><sub>Admin dashboard</sub></td>
-    <td><img src="docs/screenshots/admin-product-form.png" alt="Admin product form with image uploader"><br><sub>Admin product form with image uploads</sub></td>
+    <tr>
+    <td><img src="docs/screenshots/payment.png" alt="Order page with Stripe card payment form"><br><sub>Card payment with Stripe (test mode)</sub></td>
+     <td><img src="docs/screenshots/admin-product-form.png" alt="Admin product form with image uploader"><br><sub>Admin product form with image uploads</sub></td>
   </tr>
 </table>
 
