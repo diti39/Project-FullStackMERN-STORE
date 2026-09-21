@@ -2,7 +2,7 @@
 
 A full-stack e-commerce application built with **MongoDB, Express, React and Node.js**. Customers can browse, search, review, and buy products with card payments; admins manage products, images, and orders from a dashboard.
 
-**[Live demo](https://project-full-stack-mern-store.vercel.app/)** · **[API health check](https://project-full-stack-mern-store.vercel.app/.onrender.com/api/health)**
+**[Live demo](https://project-full-stack-mern-store.vercel.app/)** ·
 
 > The API runs on a free Render instance that sleeps when idle, so the first request after a quiet period can take 30 to 60 seconds. Payments run in Stripe **test mode**: use card `4242 4242 4242 4242`, any future expiry date, any CVC. No real money is ever charged.
 
@@ -15,11 +15,11 @@ A full-stack e-commerce application built with **MongoDB, Express, React and Nod
   </tr>
   <tr>
     <td><img src="docs/screenshots/product-details.png" alt="Product page with image gallery and reviews"><br><sub>Product page with reviews</sub></td>
-    <td><img src="docs/screenshots/checkout.png" alt="Cart and checkout"><br><sub>Cart and checkout</sub></td>
+    <td><img src="docs/screenshots/cart.png" alt="Cart and checkout"><br><sub>Cart and checkout</sub></td>
   </tr>
   <tr>
     <td><img src="docs/screenshots/payment.png" alt="Order page with Stripe card payment form"><br><sub>Card payment with Stripe (test mode)</sub></td>
-    <td><img src="docs/screenshots/orders.png" alt="Order history"><br><sub>Order history</sub></td>
+    <td><img src="docs/screenshots/order.png" alt="Order history"><br><sub>Order history</sub></td>
   </tr>
   <tr>
     <td><img src="docs/screenshots/admin-dashboard.png" alt="Admin dashboard with sales statistics"><br><sub>Admin dashboard</sub></td>
