@@ -2,9 +2,7 @@
 
 A full-stack e-commerce application built with **MongoDB, Express, React and Node.js**. Customers can browse, search, review, and buy products with card payments; admins manage products, images, and orders from a dashboard.
 
-[![CI](https://github.com/YOUR-USERNAME/mern-store/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR-USERNAME/mern-store/actions/workflows/ci.yml)
-
-**[Live demo](https://YOUR-APP.vercel.app)** · **[API health check](https://YOUR-API-NAME.onrender.com/api/health)**
+**[Live demo](https://project-full-stack-mern-store.vercel.app/)** · **[API health check](https://project-full-stack-mern-store.vercel.app/.onrender.com/api/health)**
 
 > The API runs on a free Render instance that sleeps when idle, so the first request after a quiet period can take 30 to 60 seconds. Payments run in Stripe **test mode**: use card `4242 4242 4242 4242`, any future expiry date, any CVC. No real money is ever charged.
 
@@ -32,6 +30,7 @@ A full-stack e-commerce application built with **MongoDB, Express, React and Nod
 ## Features
 
 **Customers**
+
 - Browse products with keyword search, category and price filters, sorting, and pagination. Filters live in the URL, so any view can be shared or bookmarked.
 - Product pages with an image gallery, stock status, and ratings.
 - Reviews from verified buyers only (the order must be delivered), with edit and delete.
@@ -40,21 +39,22 @@ A full-stack e-commerce application built with **MongoDB, Express, React and Nod
 - Profile page with password change.
 
 **Admins**
+
 - Dashboard with revenue, order counts by status, low-stock alerts, and recent orders.
 - Product management: create, edit, delete, feature on the home page, and upload up to five images each (stored on Cloudinary).
 - Order management: search by status and move orders through pending, processing, shipped, and delivered. Cancelling a paid order refunds it automatically.
 
 ## Tech stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React, React Router, Tailwind CSS, Axios, Vite |
-| Backend | Node.js, Express, Mongoose, JSON Web Tokens, bcrypt |
-| Database | MongoDB (Atlas in production) |
-| Images | Multer (in-memory) and Cloudinary |
-| Payments | Stripe PaymentIntents and Payment Element, with webhooks |
-| Testing | Vitest, Supertest, mongodb-memory-server, Testing Library |
-| Hosting | Vercel (client), Render (API), MongoDB Atlas, GitHub Actions (CI) |
+| Layer    | Technology                                                        |
+| -------- | ----------------------------------------------------------------- |
+| Frontend | React, React Router, Tailwind CSS, Axios, Vite                    |
+| Backend  | Node.js, Express, Mongoose, JSON Web Tokens, bcrypt               |
+| Database | MongoDB (Atlas in production)                                     |
+| Images   | Multer (in-memory) and Cloudinary                                 |
+| Payments | Stripe PaymentIntents and Payment Element, with webhooks          |
+| Testing  | Vitest, Supertest, mongodb-memory-server, Testing Library         |
+| Hosting  | Vercel (client), Render (API), MongoDB Atlas, GitHub Actions (CI) |
 
 ## Architecture
 
@@ -70,17 +70,6 @@ flowchart LR
 ```
 
 The browser only ever talks to the Vercel domain. Vercel forwards `/api/*` to the API, so the login cookie is first-party, which matters for browsers that block third-party cookies.
-
-**Data model**
-
-```mermaid
-erDiagram
-  USER ||--o{ ORDER : places
-  USER ||--o{ REVIEW : writes
-  PRODUCT ||--o{ REVIEW : receives
-  ORDER ||--|{ ORDER_ITEM : contains
-  ORDER_ITEM }o--|| PRODUCT : "snapshot of"
-```
 
 ## Engineering highlights
 
@@ -117,97 +106,21 @@ mern-store/
 └── .github/workflows/ci.yml
 ```
 
-## Getting started
-
-**Prerequisites:** Node.js 20 or newer, and a MongoDB database (local, or a free Atlas cluster). Cloudinary and Stripe test accounts are only needed for image uploads and payments.
-
-```bash
-git clone https://github.com/YOUR-USERNAME/mern-store.git
-cd mern-store
-
-# API
-cd server
-npm install
-cp .env.example .env        # Windows: copy .env.example .env
-# edit .env (see the table below)
-npm run seed                # sample data (WARNING: deletes existing data)
-npm run dev                 # http://localhost:5000
-
-# Client (second terminal)
-cd client
-npm install
-cp .env.example .env
-npm run dev                 # http://localhost:5173
-```
-
-`npm run seed` creates two local development accounts:
-
-| Role | Email | Password |
-|---|---|---|
-| Admin | `admin@example.com` | `admin123` |
-| Customer | `jane@example.com` | `jane123` |
-
-These exist only in your local database. Never use the seed script in production.
-
-### Environment variables
-
-**`server/.env`**
-
-| Variable | Purpose |
-|---|---|
-| `PORT` | API port (default 5000) |
-| `MONGO_URI` | MongoDB connection string |
-| `JWT_SECRET` | Long random string used to sign login tokens |
-| `CLIENT_URL` | Allowed website origin(s), comma-separated |
-| `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` | Image uploads |
-| `STRIPE_SECRET_KEY` | Stripe test secret key (`sk_test_...`) |
-| `STRIPE_WEBHOOK_SECRET` | Webhook signing secret (`whsec_...`) |
-
-**`client/.env`**
-
-| Variable | Purpose |
-|---|---|
-| `VITE_STRIPE_PUBLISHABLE_KEY` | Stripe test publishable key (`pk_test_...`) |
-| `VITE_API_URL` | Leave empty: in development Vite proxies `/api` to the API |
-
-To test webhooks locally, use the [Stripe CLI](https://stripe.com/docs/stripe-cli): `stripe listen --forward-to localhost:5000/api/payments/webhook`.
-
 ## API overview
 
-| Method | Endpoint | Access |
-|---|---|---|
-| POST | `/api/auth/register`, `/login`, `/logout` | public |
-| GET / PUT | `/api/auth/me`, `/api/auth/profile` | user |
-| GET | `/api/products` (search, filter, sort, paginate), `/api/products/categories`, `/api/products/:id` | public |
-| POST / PUT / DELETE | `/api/products`, `/api/products/:id` | admin |
-| GET / POST | `/api/products/:id/reviews` | public / buyer |
-| PUT / DELETE | `/api/reviews/:id` | author (delete also admin) |
-| POST | `/api/orders` | user |
-| GET | `/api/orders/mine`, `/api/orders/:id` | owner or admin |
-| PUT | `/api/orders/:id/cancel` | owner |
-| GET / PUT | `/api/orders`, `/api/orders/:id/status` | admin |
-| POST | `/api/payments/create-intent`, `/api/payments/sync` | owner |
-| POST | `/api/payments/webhook` | Stripe (signature verified) |
-| POST / DELETE | `/api/uploads` | admin |
-| GET | `/api/admin/stats` | admin |
-
-## Testing
-
-```bash
-cd server && npm test     # API integration tests against an in-memory MongoDB
-cd client && npm test     # unit tests for pricing and cart logic
-```
-
-The API tests exercise the real Express app with Supertest and cover authentication and roles, product listing and admin CRUD, server-side pricing, stock reservation and rollback, order permissions and cancellation, and the verified-purchase review rules. The first run downloads a MongoDB binary. Tests run automatically on every push through GitHub Actions.
-
-## Deployment
-
-The app runs on Vercel, Render, and MongoDB Atlas. See [DEPLOYMENT.md](DEPLOYMENT.md) for the full walkthrough, environment variables, and troubleshooting.
-
-## Known limitations and ideas
-
-- No order confirmation emails yet (Nodemailer is the natural next step).
-- No rate limiting on the login endpoint.
-- Orders store the product image URL as it was at purchase time, so deleting a product's images leaves blank thumbnails on old orders.
-- Payments are in Stripe test mode, and only cards are enabled.
-- No admin screen for managing users.
+| Method              | Endpoint                                                                                          | Access                      |
+| ------------------- | ------------------------------------------------------------------------------------------------- | --------------------------- |
+| POST                | `/api/auth/register`, `/login`, `/logout`                                                         | public                      |
+| GET / PUT           | `/api/auth/me`, `/api/auth/profile`                                                               | user                        |
+| GET                 | `/api/products` (search, filter, sort, paginate), `/api/products/categories`, `/api/products/:id` | public                      |
+| POST / PUT / DELETE | `/api/products`, `/api/products/:id`                                                              | admin                       |
+| GET / POST          | `/api/products/:id/reviews`                                                                       | public / buyer              |
+| PUT / DELETE        | `/api/reviews/:id`                                                                                | author (delete also admin)  |
+| POST                | `/api/orders`                                                                                     | user                        |
+| GET                 | `/api/orders/mine`, `/api/orders/:id`                                                             | owner or admin              |
+| PUT                 | `/api/orders/:id/cancel`                                                                          | owner                       |
+| GET / PUT           | `/api/orders`, `/api/orders/:id/status`                                                           | admin                       |
+| POST                | `/api/payments/create-intent`, `/api/payments/sync`                                               | owner                       |
+| POST                | `/api/payments/webhook`                                                                           | Stripe (signature verified) |
+| POST / DELETE       | `/api/uploads`                                                                                    | admin                       |
+| GET                 | `/api/admin/stats`                                                                                | admin                       |
